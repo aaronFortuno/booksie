@@ -7,13 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import net.estemon.studio.eac3_p3_fortunoramos_aaron.ui.BooksieApp
 import net.estemon.studio.eac3_p3_fortunoramos_aaron.ui.theme.BooksieTheme
 
@@ -39,6 +34,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+/*
 @Preview(
     showBackground = true,
     showSystemUi = true
@@ -97,3 +93,4 @@ fun BooksieAppExpandedPreview() {
         }
     }
 }
+*/

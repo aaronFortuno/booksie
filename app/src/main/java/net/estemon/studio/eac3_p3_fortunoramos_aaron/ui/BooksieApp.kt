@@ -5,6 +5,10 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import net.estemon.studio.eac3_p3_fortunoramos_aaron.data.BookEntity
+import net.estemon.studio.eac3_p3_fortunoramos_aaron.data.DefaultAppContainer
+import net.estemon.studio.eac3_p3_fortunoramos_aaron.network.ApiService
+import net.estemon.studio.eac3_p3_fortunoramos_aaron.ui.screens.AppHomeScreen
 import net.estemon.studio.eac3_p3_fortunoramos_aaron.ui.utils.AppContentType
 
 @Composable
@@ -13,8 +17,11 @@ fun BooksieApp(
     windowHeight: WindowHeightSizeClass = WindowHeightSizeClass.Medium,
     modifier: Modifier = Modifier
 ) {
-    val viewModel: AppViewModel = viewModel()
+    val appContainer = DefaultAppContainer()
+    val booksieRepository = appContainer.booksieRepository
+    val viewModel: AppViewModel = viewModel(factory = AppViewModelFactory(booksieRepository))
     val appUiState = viewModel.apiServiceUiState
+    val isShowingHomepage = viewModel.isShowingHomepage
     val contentType: AppContentType
 
     when (windowWidth) {
@@ -36,6 +43,16 @@ fun BooksieApp(
         }
     }
 
-
-
+    AppHomeScreen(
+        contentType = contentType,
+        appUiState = appUiState,
+        isShowingHomepage = isShowingHomepage,
+        onBookCardPressed = { book: BookEntity ->
+            viewModel.onBookSelected(book)
+        },
+        onDetailScreenBackPressed = {
+            viewModel.onBackToList()
+        },
+        modifier = modifier
+    )
 }
