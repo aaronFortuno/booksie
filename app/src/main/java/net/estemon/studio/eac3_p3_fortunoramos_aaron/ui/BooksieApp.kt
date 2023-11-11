@@ -51,6 +51,7 @@ fun BooksieApp(
         onDetailScreenBackPressed = {
             viewModel.onBackToList()
         },
+        appViewModel = viewModel,
         modifier = modifier
     )
 }

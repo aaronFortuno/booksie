@@ -1,6 +1,7 @@
 package net.estemon.studio.eac3_p3_fortunoramos_aaron.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -106,6 +107,7 @@ fun EmptyScreen() {
 @Composable
 fun BookListCard(
     book: BookEntity,
+    onBookCardPressed: (BookEntity) -> Unit,
     modifier: Modifier
 ) {
     SubcomposeAsyncImage(
@@ -115,11 +117,13 @@ fun BookListCard(
             .build(),
         contentDescription = book.id,
         contentScale = ContentScale.Crop,
+        loading = { CircularProgressIndicator() },
         modifier = Modifier
             .fillMaxSize()
             .padding(4.dp)
-            .background(Color.Blue),
-        loading = { CircularProgressIndicator() }
+            .clickable {
+
+            }
     )
 }
 
@@ -138,9 +142,11 @@ fun VerticalBookshelf(
         items(books) {book ->
             BookListCard(
                 book = book,
+                onBookCardPressed = onBookCardPressed,
                 modifier = modifier
                     .padding(4.dp)
-                    .aspectRatio(1.5f)
+                    .aspectRatio(1.5f),
+
             )
         }
     }
@@ -160,6 +166,7 @@ fun HorizontalBookshelf(
         items(books) {book ->
             BookListCard(
                 book = book,
+                onBookCardPressed,
                 modifier = modifier
                     .padding(4.dp)
                     .aspectRatio(1.5f)
@@ -187,6 +194,7 @@ fun ListOnlyBookshelf (
         ) { book ->
             BookListCard(
                 book = book,
+                onBookCardPressed = onBookCardPressed,
                 modifier = modifier
                     .padding(4.dp)
                     .aspectRatio(1.5f)

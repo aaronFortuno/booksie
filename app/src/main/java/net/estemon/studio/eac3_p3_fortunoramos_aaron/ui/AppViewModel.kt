@@ -35,7 +35,7 @@ class AppViewModel(
         viewModelScope.launch {
             apiServiceUiState = AppUiState.Loading
             try {
-                val books = booksieRepository.getBooks(query)
+                val books = booksieRepository.getBooks(query, 40)
                 apiServiceUiState = if (books.isNotEmpty()) {
                     AppUiState.Success(books)
                 } else {

@@ -1,23 +1,17 @@
 package net.estemon.studio.eac3_p3_fortunoramos_aaron.ui.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import net.estemon.studio.eac3_p3_fortunoramos_aaron.data.BookEntity
@@ -31,14 +25,18 @@ fun ListOnlyContent(
     appUiState: AppUiState,
     onBookCardPressed: (BookEntity) -> Unit,
     onBackPressed: () -> Unit,
-    scrollBehavior: TopAppBarScrollBehavior,
+    scrollBehavior: TopAppBarScrollBehavior
 ) {
     Scaffold(
         modifier = Modifier
             .nestedScroll(
                 scrollBehavior.nestedScrollConnection
             ),
-        topBar = { TopAppBar(scrollBehavior) }
+        topBar = {
+            TopAppBar(
+                scrollBehavior
+            )
+        }
     ) {
         Surface(
             modifier = Modifier
@@ -55,13 +53,11 @@ fun ListOnlyContent(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListAndDetailContent(
     contentType: AppContentType,
     appUiState: AppUiState,
-    onBookCardPressed: (BookEntity) -> Unit,
-    scrollBehavior: TopAppBarScrollBehavior
+    onBookCardPressed: (BookEntity) -> Unit
 ) {
     if (contentType == AppContentType.BOTTOM_LIST_AND_DETAIL) {
         BottomListAndDetailContent(
@@ -73,13 +69,11 @@ fun ListAndDetailContent(
         LeftListAndDetailContent(
             contentType,
             appUiState,
-            onBookCardPressed,
-            scrollBehavior
+            onBookCardPressed
         )
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomListAndDetailContent(
     contentType: AppContentType,
@@ -108,13 +102,11 @@ fun BottomListAndDetailContent(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LeftListAndDetailContent(
     contentType: AppContentType,
     appUiState: AppUiState,
-    onBookCardPressed: (BookEntity) -> Unit,
-    scrollBehavior: TopAppBarScrollBehavior
+    onBookCardPressed: (BookEntity) -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -124,12 +116,6 @@ fun LeftListAndDetailContent(
             modifier = Modifier
                 .width(150.dp)
         ) {
-            SmallAppBar(
-                scrollBehavior = scrollBehavior,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .nestedScroll(scrollBehavior.nestedScrollConnection)
-            )
             BookList(
                 contentType = contentType,
                 appUiState = appUiState,
