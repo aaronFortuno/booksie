@@ -9,46 +9,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import net.estemon.studio.eac3_p3_fortunoramos_aaron.ui.AppUiState
+import net.estemon.studio.eac3_p3_fortunoramos_aaron.data.BookEntity
 
 @Composable
-fun CompactDetailsScreen(
-    appUiState: AppUiState,
-    onBackPressed: () -> Unit,
-    isFullScreen: Boolean = false,
-    modifier: Modifier = Modifier,
-) {
+fun CompactDetailsScreen() {
 
 }
-
-@Composable
-fun CompactDetailsHeader(
-
-) {
-
-}
-
-@Composable
-fun CompactDetailsContent(
-
-) {
-
-}
-
-@Composable
-fun StandardDetailLayout(
-    appUiState: AppUiState,
-    modifier: Modifier
-) {
-    StandardDetailContent(
-        modifier = modifier
-    )
-}
-
-
 
 @Composable
 fun StandardDetailContent(
+    book: BookEntity,
     modifier: Modifier
 ) {
     Row(
@@ -58,10 +28,12 @@ fun StandardDetailContent(
             .fillMaxSize()
     ) {
         StandardDetailBookImage(
+            book,
             modifier = Modifier
                 .weight(1f)
         )
         StandardDetailBookData(
+            book,
             modifier = Modifier
                 .weight(1f)
         )
@@ -70,6 +42,7 @@ fun StandardDetailContent(
 
 @Composable
 fun StandardDetailBookImage(
+    book: BookEntity,
     modifier: Modifier
 ) {
     Column(
@@ -78,12 +51,25 @@ fun StandardDetailBookImage(
         modifier = modifier
             .fillMaxHeight()
     ) {
-        Text("image")
+        /*SubcomposeAsyncImage(
+            model = ImageRequest.Builder(context = LocalContext.current)
+                .data(book.thumbnail)
+                .crossfade(true)
+                .build(),
+            contentDescription = book.id,
+            contentScale = ContentScale.Crop,
+            loading = { CircularProgressIndicator() },
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(4.dp)
+        )*/
+        Text(text = book.thumbnail)
     }
 }
 
 @Composable
 fun StandardDetailBookData(
+    book: BookEntity,
     modifier: Modifier
 ) {
     Column(
@@ -92,18 +78,6 @@ fun StandardDetailBookData(
         modifier = modifier
             .fillMaxHeight()
     ) {
-        //StandardDetailHeader()
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxHeight()
-        ) {
-            Text("details")
-        }
+        Text(book.id)
     }
-}
-
-@Composable
-fun StandardDetailHeader() {
-    SmallAppBar()
 }

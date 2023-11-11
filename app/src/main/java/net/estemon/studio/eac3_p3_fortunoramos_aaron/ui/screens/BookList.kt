@@ -1,35 +1,26 @@
 package net.estemon.studio.eac3_p3_fortunoramos_aaron.ui.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -45,6 +36,7 @@ fun BookList(
     appUiState: AppUiState,
     onBookCardPressed: (BookEntity) -> Unit,
     onBackPressed: () -> Unit,
+    selectedBook: BookEntity,
     modifier: Modifier = Modifier
 ) {
     when (appUiState) {
@@ -56,26 +48,23 @@ fun BookList(
                 HorizontalBookshelf(
                     books = appUiState.books,
                     onBookCardPressed = onBookCardPressed,
+                    book = selectedBook,
                     modifier
                 )
             } else if (contentType == AppContentType.LIST_OR_DETAIL) {
                 ListOnlyBookshelf(
                     books = appUiState.books,
                     onBookCardPressed = onBookCardPressed,
-                    onBackPressed = onBackPressed,
                     modifier
                 )
             } else {
                 VerticalBookshelf(
                     books = appUiState.books,
                     onBookCardPressed = onBookCardPressed,
+                    book = selectedBook,
                     modifier
                 )
             }
-        is AppUiState.BookSelected -> CompactDetailsScreen(
-            appUiState = appUiState,
-            onBackPressed = onBackPressed
-        )
     }
 }
 
@@ -121,65 +110,85 @@ fun BookListCard(
         modifier = Modifier
             .fillMaxSize()
             .padding(4.dp)
-            .clickable {
-
-            }
+            .clickable { onBookCardPressed(book) }
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VerticalBookshelf(
     books: List<BookEntity>,
     onBookCardPressed: (BookEntity) -> Unit,
+    book: BookEntity,
     modifier: Modifier
 ) {
-    LazyColumn(
-        contentPadding = PaddingValues(4.dp),
-        modifier = Modifier
-            .width(150.dp)
-    ) {
-        items(books) {book ->
-            BookListCard(
-                book = book,
-                onBookCardPressed = onBookCardPressed,
-                modifier = modifier
-                    .padding(4.dp)
-                    .aspectRatio(1.5f),
+    Row {
+        LazyColumn(
+            contentPadding = PaddingValues(4.dp),
+            modifier = Modifier
+                .width(150.dp)
+        ) {
+            items(books) {book ->
+                BookListCard(
+                    book = book,
+                    onBookCardPressed = { onBookCardPressed(book) },
+                    modifier = modifier
+                        .padding(4.dp)
+                        .aspectRatio(1.5f),
 
+                    )
+            }
+        }
+        book?.let {
+            StandardDetailContent(
+                book = book,
+                modifier = Modifier
+                    .weight(1f)
             )
         }
     }
+
 }
 
 @Composable
 fun HorizontalBookshelf(
     books: List<BookEntity>,
     onBookCardPressed: (BookEntity) -> Unit,
-    modifier: Modifier
+    book: BookEntity,
+    modifier: Modifier,
+
 ) {
-    LazyRow(
-        contentPadding = PaddingValues(4.dp),
-        modifier = Modifier
-            .height(150.dp)
-    ) {
-        items(books) {book ->
-            BookListCard(
+    Column {
+        book?.let {
+            StandardDetailContent(
                 book = book,
-                onBookCardPressed,
-                modifier = modifier
-                    .padding(4.dp)
-                    .aspectRatio(1.5f)
+                modifier = Modifier
+                    .weight(1f)
             )
         }
+        LazyRow(
+            contentPadding = PaddingValues(4.dp),
+            modifier = Modifier
+                .height(150.dp)
+        ) {
+            items(books) {book ->
+                BookListCard(
+                    book = book,
+                    onBookCardPressed = { onBookCardPressed(book) },
+                    modifier = modifier
+                        .padding(4.dp)
+                        .aspectRatio(1.5f)
+                )
+            }
+        }
     }
+
+
 }
 
 @Composable
 fun ListOnlyBookshelf (
     books: List<BookEntity>,
     onBookCardPressed: (BookEntity) -> Unit,
-    onBackPressed: () -> Unit,
     modifier: Modifier
 ) {
     LazyVerticalGrid(

@@ -15,14 +15,14 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -64,12 +64,7 @@ fun AppHomeScreen(
                 modifier = modifier
             )
         } else {
-            CompactDetailsScreen(
-                appUiState = appUiState,
-                onBackPressed = onDetailScreenBackPressed,
-                isFullScreen = true,
-                modifier = modifier
-            )
+            CompactDetailsScreen()
         }
 
         Box(
@@ -110,14 +105,12 @@ fun AppHomeScreen(
                     },
                     modifier = Modifier
                         .align(Alignment.BottomStart)
-                        //.padding(bottom = 12.dp, start = 20.dp)
                 )
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppContent(
     contentType: AppContentType,
@@ -126,18 +119,21 @@ fun AppContent(
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val BookEntitySaver: Saver<BookEntity, *> = Saver(
+        save = { arrayOf(it.id, it.thumbnail) },
+        restore = { BookEntity(it[0], it[1]) }
+    )
+    var selectedBook by rememberSaveable(stateSaver = BookEntitySaver) {
+        mutableStateOf(BookEntity("-1", "https://en.wikipedia.org/wiki/Book#/media/File:Books_and_Scroll_Ornament_with_Open_Book.png"))
+    }
     Box(
         modifier = modifier
     ) {
         Row(
             modifier = Modifier
-            //.fillMaxSize()
         ) {
             Column(
                 modifier = Modifier
-                //.fillMaxSize()
-                //.background(MaterialTheme.colorScheme.inverseOnSurface)
             ) {
                 if (contentType == AppContentType.LIST_OR_DETAIL) {
                     ListOnlyContent(
@@ -145,13 +141,14 @@ fun AppContent(
                         appUiState,
                         onBookCardPressed,
                         onBackPressed,
-                        scrollBehavior
+                        selectedBook
                     )
                 } else {
                     ListAndDetailContent(
                         contentType,
                         appUiState,
-                        onBookCardPressed
+                        onBookCardPressed,
+                        selectedBook
                     )
                 }
             }

@@ -14,7 +14,6 @@ import java.io.IOException
 sealed interface AppUiState {
     data class Success(val books: List<BookEntity>) : AppUiState
 
-    data class BookSelected(val selectedBook: BookEntity) : AppUiState
     object Error: AppUiState
     object Loading: AppUiState
     object Empty: AppUiState
@@ -26,6 +25,8 @@ class AppViewModel(
 
     var apiServiceUiState: AppUiState by mutableStateOf(AppUiState.Loading)
         private set
+
+    var selectedBook: BookEntity? by mutableStateOf(null)
 
     init {
         getBooks(query = "jazz")
@@ -51,11 +52,12 @@ class AppViewModel(
         private set
 
     fun onBookSelected(book: BookEntity) {
-        apiServiceUiState = AppUiState.BookSelected(book)
-        isShowingHomepage = false
+        selectedBook = book
+        //isShowingHomepage = false
     }
 
     fun onBackToList() {
+        selectedBook = null
         isShowingHomepage = true
     }
 }
