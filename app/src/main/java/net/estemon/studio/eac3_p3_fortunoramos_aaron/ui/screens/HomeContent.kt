@@ -27,7 +27,19 @@ fun ListOnlyContent(
     onBackPressed: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior
 ) {
-    Scaffold(
+    Surface(
+        modifier = Modifier
+            //.fillMaxSize()
+            .padding(4.dp)
+    ) {
+        BookList(
+            contentType,
+            appUiState,
+            onBookCardPressed,
+            onBackPressed
+        )
+    }
+    /*Scaffold(
         modifier = Modifier
             .nestedScroll(
                 scrollBehavior.nestedScrollConnection
@@ -50,7 +62,7 @@ fun ListOnlyContent(
                 onBackPressed
             )
         }
-    }
+    }*/
 }
 
 @Composable

@@ -3,16 +3,17 @@ package net.estemon.studio.eac3_p3_fortunoramos_aaron.ui.screens
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.shrinkHorizontally
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -78,24 +79,38 @@ fun AppHomeScreen(
         ) {
             FloatingActionButton(
                 onClick = { showSearchBar = !showSearchBar },
+                shape = CircleShape,
                 modifier = Modifier
                     .align(Alignment.BottomStart)
-                    .padding(16.dp)
             ) {
-                Icon(Icons.Default.Search, contentDescription = null)
+
+                if (showSearchBar) {
+                    Icon(Icons.Default.Clear, contentDescription = null)
+                } else {
+                    Icon(Icons.Default.Search, contentDescription = null)
+                }
+
             }
 
             AnimatedVisibility(
                 visible = showSearchBar,
-                //enter = slideInVertically() + expandHorizontally(),
-                //exit = slideOutVertically() + shrinkHorizontally()
+                enter = expandHorizontally(),
+                exit = shrinkHorizontally(),
+                modifier = Modifier
+                    .offset(60.dp)
             ) {
+                var text by remember { mutableStateOf("") }
                 AppSearchBar(
-                    appViewModel = appViewModel,
-                    onSearchCompleted = { showSearchBar = false },
+                    query = text,
+                    onQueryChange = { text = it },
+                    onSearch = {
+                        if (text.isNotBlank()) {
+                            appViewModel.getBooks(text)
+                        }
+                    },
                     modifier = Modifier
                         .align(Alignment.BottomStart)
-                        .padding(16.dp)
+                        //.padding(bottom = 12.dp, start = 20.dp)
                 )
             }
         }
