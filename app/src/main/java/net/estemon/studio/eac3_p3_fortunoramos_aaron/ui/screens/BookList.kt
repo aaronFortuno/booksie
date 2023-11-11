@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -23,19 +22,38 @@ import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import net.estemon.studio.eac3_p3_fortunoramos_aaron.data.BookEntity
 import net.estemon.studio.eac3_p3_fortunoramos_aaron.ui.AppUiState
+import net.estemon.studio.eac3_p3_fortunoramos_aaron.ui.utils.AppContentType
 
 @Composable
 fun BookList(
+    contentType: AppContentType,
     appUiState: AppUiState,
     onBookCardPressed: (BookEntity) -> Unit,
+    onBackPressed: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     when (appUiState) {
-        is AppUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
-        is AppUiState.Success -> HorizontalBookshelf(appUiState.books, modifier)
-        is AppUiState.Error -> ErrorScreen(modifier = modifier.fillMaxSize())
-        is AppUiState.Empty -> EmptyScreen(modifier = modifier.fillMaxSize())
-        is AppUiState.BookSelected -> ListAndDetailContent(appUiState = appUiState, onBookCardPressed)
+        is AppUiState.Loading -> LoadingScreen()
+        is AppUiState.Error -> ErrorScreen()
+        is AppUiState.Empty -> EmptyScreen()
+        is AppUiState.Success ->
+            if (contentType == AppContentType.HORIZONTAL_LIST_AND_DETAIL) {
+                HorizontalBookshelf(
+                    books = appUiState.books,
+                    onBookCardPressed = onBookCardPressed,
+                    modifier
+                )
+            } else {
+                VerticalBookshelf(
+                    books = appUiState.books,
+                    onBookCardPressed = onBookCardPressed,
+                    modifier
+                )
+            }
+        is AppUiState.BookSelected -> CompactDetailsScreen(
+            appUiState = appUiState,
+            onBackPressed = onBackPressed
+        )
     }
 }
 
@@ -50,22 +68,22 @@ fun CommonScreen(text: String) {
 }
 
 @Composable
-fun LoadingScreen(modifier: Modifier = Modifier) {
+fun LoadingScreen() {
     CommonScreen("LOADING DATA")
 }
 
 @Composable
-fun ErrorScreen(modifier: Modifier = Modifier) {
+fun ErrorScreen() {
     CommonScreen("ERROR")
 }
 
 @Composable
-fun EmptyScreen(modifier: Modifier = Modifier) {
+fun EmptyScreen() {
     CommonScreen("NO RESULTS")
 }
 
 @Composable
-fun BookCard(
+fun BookListCard(
     book: BookEntity,
     modifier: Modifier
 ) {
@@ -86,6 +104,7 @@ fun BookCard(
 @Composable
 fun VerticalBookshelf(
     books: List<BookEntity>,
+    onBookCardPressed: (BookEntity) -> Unit,
     modifier: Modifier
 ) {
     LazyVerticalGrid(
@@ -97,7 +116,7 @@ fun VerticalBookshelf(
             items = books,
             key = { book -> book.id }
         ) { book ->
-            BookCard(
+            BookListCard(
                 book = book,
                 modifier = modifier
                     .padding(4.dp)
@@ -111,6 +130,7 @@ fun VerticalBookshelf(
 @Composable
 fun HorizontalBookshelf(
     books: List<BookEntity>,
+    onBookCardPressed: (BookEntity) -> Unit,
     modifier: Modifier
 ) {
     LazyHorizontalGrid(
@@ -122,7 +142,7 @@ fun HorizontalBookshelf(
             items = books,
             key = { book -> book.id }
         ) { book ->
-            BookCard(
+            BookListCard(
                 book = book,
                 modifier = modifier
                     .padding(4.dp)

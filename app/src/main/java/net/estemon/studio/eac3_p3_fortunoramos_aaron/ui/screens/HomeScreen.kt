@@ -26,6 +26,7 @@ fun AppHomeScreen(
             contentType = contentType,
             appUiState = appUiState,
             onBookCardPressed = onBookCardPressed,
+            onBackPressed = onDetailScreenBackPressed,
             modifier = modifier
         )
     } else {
@@ -44,6 +45,7 @@ fun AppContent(
     contentType: AppContentType,
     appUiState: AppUiState,
     onBookCardPressed: (BookEntity) -> Unit,
+    onBackPressed: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier) {
@@ -54,9 +56,18 @@ fun AppContent(
                     .background(MaterialTheme.colorScheme.inverseOnSurface)
             ) {
                 if (contentType == AppContentType.LIST_OR_DETAIL) {
-                    ListAndDetailContent(appUiState, onBookCardPressed)
+                    ListOnlyContent(
+                        contentType,
+                        appUiState,
+                        onBookCardPressed,
+                        onBackPressed
+                    )
                 } else {
-                    ListOnlyContent(appUiState, onBookCardPressed)
+                    ListAndDetailContent(
+                        contentType,
+                        appUiState,
+                        onBookCardPressed
+                    )
                 }
             }
         }
