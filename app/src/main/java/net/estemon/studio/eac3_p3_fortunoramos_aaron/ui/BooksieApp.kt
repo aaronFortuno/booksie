@@ -23,22 +23,21 @@ fun BooksieApp(
     val isShowingHomepage = viewModel.isShowingHomepage
     val contentType: AppContentType
 
-    when (windowWidth) {
-        WindowWidthSizeClass.Compact -> {
-            contentType = AppContentType.LIST_OR_DETAIL
+    when (windowHeight) {
+        WindowHeightSizeClass.Compact -> {
+            contentType = AppContentType.LEFT_LIST_AND_DETAIL
         }
-        WindowWidthSizeClass.Medium -> {
-            if (windowHeight == WindowHeightSizeClass.Compact) {
-                contentType = AppContentType.VERTICAL_LIST_AND_DETAIL
+        WindowHeightSizeClass.Medium -> {
+            if (windowWidth == WindowWidthSizeClass.Compact) {
+                contentType = AppContentType.LIST_OR_DETAIL
+            } else if (windowWidth == WindowWidthSizeClass.Medium) {
+                contentType = AppContentType.BOTTOM_LIST_AND_DETAIL
             } else {
-                contentType = AppContentType.HORIZONTAL_LIST_AND_DETAIL
+                contentType = AppContentType.LEFT_LIST_AND_DETAIL
             }
         }
-        WindowWidthSizeClass.Expanded -> {
-            contentType = AppContentType.HORIZONTAL_LIST_AND_DETAIL
-        }
         else -> {
-            contentType = AppContentType.HORIZONTAL_LIST_AND_DETAIL
+            contentType = AppContentType.BOTTOM_LIST_AND_DETAIL
         }
     }
 

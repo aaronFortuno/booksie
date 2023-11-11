@@ -5,9 +5,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import net.estemon.studio.eac3_p3_fortunoramos_aaron.data.BookEntity
 import net.estemon.studio.eac3_p3_fortunoramos_aaron.ui.AppUiState
 import net.estemon.studio.eac3_p3_fortunoramos_aaron.ui.utils.AppContentType
@@ -40,6 +43,7 @@ fun AppHomeScreen(
 
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppContent(
     contentType: AppContentType,
@@ -48,25 +52,35 @@ fun AppContent(
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(modifier = modifier) {
-        Row(modifier = Modifier.fillMaxSize()) {
+    var scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    Box(
+        modifier = modifier
+    ) {
+        Row(
+            modifier = Modifier
+                //.fillMaxSize()
+                .background(Color.Yellow)
+        ) {
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.inverseOnSurface)
+                    //.fillMaxSize()
+                    .background(Color.DarkGray)
+                    //.background(MaterialTheme.colorScheme.inverseOnSurface)
             ) {
                 if (contentType == AppContentType.LIST_OR_DETAIL) {
                     ListOnlyContent(
                         contentType,
                         appUiState,
                         onBookCardPressed,
-                        onBackPressed
+                        onBackPressed,
+                        scrollBehavior
                     )
                 } else {
                     ListAndDetailContent(
                         contentType,
                         appUiState,
-                        onBookCardPressed
+                        onBookCardPressed,
+                        scrollBehavior
                     )
                 }
             }
