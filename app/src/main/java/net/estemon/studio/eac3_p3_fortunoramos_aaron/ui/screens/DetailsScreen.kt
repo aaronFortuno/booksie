@@ -40,8 +40,6 @@ fun CompactDetailsScreen(
                 book = book,
                 modifier = modifier
             )
-            StandardDetailBookImage(book = book, modifier = modifier.size(250.dp))
-
         }
     }
 }

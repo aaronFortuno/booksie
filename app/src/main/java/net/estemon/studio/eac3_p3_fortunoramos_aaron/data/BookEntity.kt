@@ -12,7 +12,7 @@ data class BookEntity(
     val thumbnail: String
 )
 
-val defaultBook = BookEntity("-1", "title", ", subtitle", listOf("author1", "author2"),"publisher", "https://en.wikipedia.org/wiki/Book#/media/File:Books_and_Scroll_Ornament_with_Open_Book.png")
+val defaultBook = BookEntity("-1", "Choose a book from the list", "or search for new books", listOf("Author 1", "Author 2"),"Publisher", "https://en.wikipedia.org/wiki/Book#/media/File:Books_and_Scroll_Ornament_with_Open_Book.png")
 
 @Serializable
 data class BookResponse(
