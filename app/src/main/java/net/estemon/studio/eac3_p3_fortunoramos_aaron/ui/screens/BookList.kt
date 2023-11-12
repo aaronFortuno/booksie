@@ -45,11 +45,11 @@ fun BookList(
         is AppUiState.Empty -> EmptyScreen()
         is AppUiState.Success ->
             if (contentType == AppContentType.BOTTOM_LIST_AND_DETAIL) {
-                HorizontalBookshelf(
+                BottomListAndDetailContent(
                     books = appUiState.books,
                     onBookCardPressed = onBookCardPressed,
-                    book = selectedBook,
-                    modifier
+                    selectedBook = selectedBook,
+                    modifier = modifier
                 )
             } else if (contentType == AppContentType.LIST_OR_DETAIL) {
                 ListOnlyBookshelf(
@@ -58,11 +58,11 @@ fun BookList(
                     modifier
                 )
             } else {
-                VerticalBookshelf(
+                LeftListAndDetailContent(
                     books = appUiState.books,
                     onBookCardPressed = onBookCardPressed,
-                    book = selectedBook,
-                    modifier
+                    selectedBook = selectedBook,
+                    modifier = modifier
                 )
             }
     }
@@ -130,20 +130,13 @@ fun VerticalBookshelf(
             items(books) {book ->
                 BookListCard(
                     book = book,
-                    onBookCardPressed = { onBookCardPressed(book) },
+                    onBookCardPressed = onBookCardPressed,
                     modifier = modifier
                         .padding(4.dp)
                         .aspectRatio(1.5f),
 
                     )
             }
-        }
-        book?.let {
-            StandardDetailContent(
-                book = book,
-                modifier = Modifier
-                    .weight(1f)
-            )
         }
     }
 
@@ -158,13 +151,6 @@ fun HorizontalBookshelf(
 
 ) {
     Column {
-        book?.let {
-            StandardDetailContent(
-                book = book,
-                modifier = Modifier
-                    .weight(1f)
-            )
-        }
         LazyRow(
             contentPadding = PaddingValues(4.dp),
             modifier = Modifier
@@ -181,8 +167,6 @@ fun HorizontalBookshelf(
             }
         }
     }
-
-
 }
 
 @Composable

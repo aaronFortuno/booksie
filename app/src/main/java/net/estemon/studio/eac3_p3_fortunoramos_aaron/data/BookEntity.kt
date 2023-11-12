@@ -8,6 +8,8 @@ data class BookEntity(
     val thumbnail: String
 )
 
+val defaultBook = BookEntity("-1", "https://en.wikipedia.org/wiki/Book#/media/File:Books_and_Scroll_Ornament_with_Open_Book.png")
+
 @Serializable
 data class BookResponse(
     val items: List<Book>

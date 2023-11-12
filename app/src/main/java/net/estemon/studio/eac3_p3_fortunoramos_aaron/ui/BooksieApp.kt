@@ -28,12 +28,16 @@ fun BooksieApp(
             contentType = AppContentType.LEFT_LIST_AND_DETAIL
         }
         WindowHeightSizeClass.Medium -> {
-            if (windowWidth == WindowWidthSizeClass.Compact) {
-                contentType = AppContentType.LIST_OR_DETAIL
-            } else if (windowWidth == WindowWidthSizeClass.Medium) {
-                contentType = AppContentType.BOTTOM_LIST_AND_DETAIL
-            } else {
-                contentType = AppContentType.LEFT_LIST_AND_DETAIL
+            contentType = when (windowWidth) {
+                WindowWidthSizeClass.Compact -> {
+                    AppContentType.LIST_OR_DETAIL
+                }
+                WindowWidthSizeClass.Medium -> {
+                    AppContentType.BOTTOM_LIST_AND_DETAIL
+                }
+                else -> {
+                    AppContentType.LEFT_LIST_AND_DETAIL
+                }
             }
         }
         else -> {

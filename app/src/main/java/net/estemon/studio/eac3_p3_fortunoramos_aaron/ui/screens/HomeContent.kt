@@ -3,7 +3,6 @@ package net.estemon.studio.eac3_p3_fortunoramos_aaron.ui.screens
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Surface
@@ -37,36 +36,11 @@ fun ListOnlyContent(
 }
 
 @Composable
-fun ListAndDetailContent(
-    contentType: AppContentType,
-    appUiState: AppUiState,
-    onBookCardPressed: (BookEntity) -> Unit,
-    selectedBook: BookEntity
-) {
-
-    if (contentType == AppContentType.BOTTOM_LIST_AND_DETAIL) {
-        BottomListAndDetailContent(
-            contentType,
-            appUiState,
-            onBookCardPressed,
-            selectedBook
-        )
-    } else {
-        LeftListAndDetailContent(
-            contentType,
-            appUiState,
-            onBookCardPressed,
-            selectedBook
-        )
-    }
-}
-
-@Composable
 fun BottomListAndDetailContent(
-    contentType: AppContentType,
-    appUiState: AppUiState,
+    books: List<BookEntity>,
     onBookCardPressed: (BookEntity) -> Unit,
-    selectedBook: BookEntity
+    selectedBook: BookEntity,
+    modifier: Modifier
 ) {
     Column(
         modifier = Modifier
@@ -78,14 +52,12 @@ fun BottomListAndDetailContent(
                 modifier = Modifier
                     .weight(1f)
             )
-            BookList(
-                contentType = contentType,
-                appUiState = appUiState,
-                onBookCardPressed = { onBookCardPressed(selectedBook) },
-                onBackPressed = { },
-                selectedBook = selectedBook,
-                modifier = Modifier
-                    .height(150.dp)
+            HorizontalBookshelf(
+                books = books,
+                onBookCardPressed = onBookCardPressed,
+                book = selectedBook,
+                modifier = modifier
+                    .width(150.dp)
             )
         }
     }
@@ -93,10 +65,10 @@ fun BottomListAndDetailContent(
 
 @Composable
 fun LeftListAndDetailContent(
-    contentType: AppContentType,
-    appUiState: AppUiState,
+    books: List<BookEntity>,
     onBookCardPressed: (BookEntity) -> Unit,
-    selectedBook: BookEntity
+    selectedBook: BookEntity,
+    modifier: Modifier
 ) {
     Row(
         modifier = Modifier
@@ -106,12 +78,11 @@ fun LeftListAndDetailContent(
             modifier = Modifier
                 .width(150.dp)
         ) {
-            BookList(
-                contentType = contentType,
-                appUiState = appUiState,
-                onBookCardPressed = { onBookCardPressed(selectedBook) },
-                onBackPressed = { },
-                selectedBook = selectedBook
+            VerticalBookshelf(
+                books = books,
+                onBookCardPressed = onBookCardPressed,
+                book = selectedBook,
+                modifier = modifier
             )
         }
 

@@ -6,6 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import net.estemon.studio.eac3_p3_fortunoramos_aaron.data.BookEntity
 import net.estemon.studio.eac3_p3_fortunoramos_aaron.data.BooksieRepository
@@ -26,8 +29,12 @@ class AppViewModel(
     var apiServiceUiState: AppUiState by mutableStateOf(AppUiState.Loading)
         private set
 
-    var selectedBook: BookEntity? by mutableStateOf(null)
+    private val _selectedBook = MutableStateFlow<BookEntity?>(null)
+    val selectedBook: StateFlow<BookEntity?> = _selectedBook.asStateFlow()
 
+    fun onBookSelected(book: BookEntity) {
+        _selectedBook.value = book
+    }
     init {
         getBooks(query = "jazz")
     }
@@ -51,13 +58,9 @@ class AppViewModel(
     var isShowingHomepage: Boolean by mutableStateOf(true)
         private set
 
-    fun onBookSelected(book: BookEntity) {
-        selectedBook = book
-        //isShowingHomepage = false
-    }
+
 
     fun onBackToList() {
-        selectedBook = null
         isShowingHomepage = true
     }
 }

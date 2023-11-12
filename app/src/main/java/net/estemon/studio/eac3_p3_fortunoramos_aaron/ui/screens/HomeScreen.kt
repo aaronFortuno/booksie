@@ -18,16 +18,16 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import net.estemon.studio.eac3_p3_fortunoramos_aaron.data.BookEntity
+import net.estemon.studio.eac3_p3_fortunoramos_aaron.data.defaultBook
 import net.estemon.studio.eac3_p3_fortunoramos_aaron.ui.AppUiState
 import net.estemon.studio.eac3_p3_fortunoramos_aaron.ui.AppViewModel
 import net.estemon.studio.eac3_p3_fortunoramos_aaron.ui.utils.AppContentType
@@ -43,6 +43,7 @@ fun AppHomeScreen(
     modifier: Modifier = Modifier
 ) {
     var showSearchBar by remember { mutableStateOf(false) }
+    val selectedBook by appViewModel.selectedBook.collectAsState()
 
     Box(
         modifier = Modifier
@@ -61,7 +62,9 @@ fun AppHomeScreen(
                 appUiState = appUiState,
                 onBookCardPressed = onBookCardPressed,
                 onBackPressed = onDetailScreenBackPressed,
-                modifier = modifier
+                selectedBook = selectedBook ?: defaultBook,
+                modifier = modifier,
+
             )
         } else {
             CompactDetailsScreen()
@@ -117,15 +120,9 @@ fun AppContent(
     appUiState: AppUiState,
     onBookCardPressed: (BookEntity) -> Unit,
     onBackPressed: () -> Unit,
+    selectedBook: BookEntity,
     modifier: Modifier = Modifier,
 ) {
-    val BookEntitySaver: Saver<BookEntity, *> = Saver(
-        save = { arrayOf(it.id, it.thumbnail) },
-        restore = { BookEntity(it[0], it[1]) }
-    )
-    var selectedBook by rememberSaveable(stateSaver = BookEntitySaver) {
-        mutableStateOf(BookEntity("-1", "https://en.wikipedia.org/wiki/Book#/media/File:Books_and_Scroll_Ornament_with_Open_Book.png"))
-    }
     Box(
         modifier = modifier
     ) {
@@ -144,11 +141,12 @@ fun AppContent(
                         selectedBook
                     )
                 } else {
-                    ListAndDetailContent(
-                        contentType,
-                        appUiState,
-                        onBookCardPressed,
-                        selectedBook
+                    BookList(
+                        contentType = contentType,
+                        appUiState = appUiState,
+                        onBookCardPressed = onBookCardPressed,
+                        onBackPressed = { /*TODO*/ },
+                        selectedBook = selectedBook
                     )
                 }
             }
