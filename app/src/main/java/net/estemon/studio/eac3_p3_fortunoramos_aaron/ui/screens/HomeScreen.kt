@@ -38,7 +38,7 @@ fun AppHomeScreen(
     appUiState: AppUiState,
     isShowingHomepage: Boolean,
     onBookCardPressed: (BookEntity) -> Unit,
-    onDetailScreenBackPressed: () -> Unit,
+    onDetailScreenBackPressed: (BookEntity) -> Unit,
     appViewModel: AppViewModel,
     modifier: Modifier = Modifier
 ) {
@@ -56,18 +56,33 @@ fun AppHomeScreen(
                 }
             }
     ) {
-        if (isShowingHomepage) {
+        if (contentType == AppContentType.LIST_OR_DETAIL) {
+            if (isShowingHomepage) {
+                AppContent(
+                    contentType = contentType,
+                    appUiState = appUiState,
+                    onBookCardPressed = onBookCardPressed,
+                    onBackPressed = onDetailScreenBackPressed,
+                    selectedBook = selectedBook ?: defaultBook,
+                    modifier = modifier
+                )
+            } else {
+                CompactDetailsScreen(
+                    book = selectedBook ?: defaultBook,
+                    isShowingHomepage = isShowingHomepage,
+                    onBackPressed = onDetailScreenBackPressed,
+                    modifier = modifier
+                )
+            }
+        } else {
             AppContent(
                 contentType = contentType,
                 appUiState = appUiState,
                 onBookCardPressed = onBookCardPressed,
                 onBackPressed = onDetailScreenBackPressed,
                 selectedBook = selectedBook ?: defaultBook,
-                modifier = modifier,
-
+                modifier = modifier
             )
-        } else {
-            CompactDetailsScreen()
         }
 
         Box(
@@ -106,6 +121,8 @@ fun AppHomeScreen(
                             appViewModel.getBooks(text)
                         }
                     },
+                    appViewModel = appViewModel,
+                    showSearchBar = showSearchBar,
                     modifier = Modifier
                         .align(Alignment.BottomStart)
                 )
@@ -119,7 +136,7 @@ fun AppContent(
     contentType: AppContentType,
     appUiState: AppUiState,
     onBookCardPressed: (BookEntity) -> Unit,
-    onBackPressed: () -> Unit,
+    onBackPressed: (BookEntity) -> Unit,
     selectedBook: BookEntity,
     modifier: Modifier = Modifier,
 ) {
@@ -145,7 +162,6 @@ fun AppContent(
                         contentType = contentType,
                         appUiState = appUiState,
                         onBookCardPressed = onBookCardPressed,
-                        onBackPressed = { /*TODO*/ },
                         selectedBook = selectedBook
                     )
                 }

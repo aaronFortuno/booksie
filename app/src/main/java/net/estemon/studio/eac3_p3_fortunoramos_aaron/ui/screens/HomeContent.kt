@@ -18,7 +18,7 @@ fun ListOnlyContent(
     contentType: AppContentType,
     appUiState: AppUiState,
     onBookCardPressed: (BookEntity) -> Unit,
-    onBackPressed: () -> Unit,
+    onBackPressed: (BookEntity) -> Unit,
     selectedBook: BookEntity
 ) {
     Surface(
@@ -29,7 +29,6 @@ fun ListOnlyContent(
             contentType,
             appUiState,
             onBookCardPressed,
-            onBackPressed,
             selectedBook
         )
     }
@@ -49,13 +48,13 @@ fun BottomListAndDetailContent(
         Column {
             StandardDetailContent(
                 book = selectedBook,
+                onBookCardPressed,
                 modifier = Modifier
                     .weight(1f)
             )
             HorizontalBookshelf(
                 books = books,
                 onBookCardPressed = onBookCardPressed,
-                book = selectedBook,
                 modifier = modifier
                     .width(150.dp)
             )
@@ -81,13 +80,13 @@ fun LeftListAndDetailContent(
             VerticalBookshelf(
                 books = books,
                 onBookCardPressed = onBookCardPressed,
-                book = selectedBook,
                 modifier = modifier
             )
         }
 
         StandardDetailContent(
             book = selectedBook,
+            onBookCardPressed,
             modifier = Modifier
                 .weight(1f)
         )

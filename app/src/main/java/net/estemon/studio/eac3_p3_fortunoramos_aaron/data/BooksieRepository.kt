@@ -15,7 +15,14 @@ class NetworkBooksRepository(
         return response.items.mapNotNull { book ->
             book.volumeInfo.imageLinks?.thumbnail?.let { thumbnail ->
                 val secureThumbnail = thumbnail.replace("http", "https")
-                BookEntity(id = book.id, thumbnail = secureThumbnail)
+                BookEntity(
+                    id = book.id,
+                    title = book.volumeInfo.title,
+                    subtitle = book.volumeInfo.subtitle,
+                    authors = book.volumeInfo.authors,
+                    publisher = book.volumeInfo.publisher,
+                    thumbnail = secureThumbnail
+                )
             }
         }
     }

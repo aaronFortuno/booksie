@@ -34,6 +34,7 @@ class AppViewModel(
 
     fun onBookSelected(book: BookEntity) {
         _selectedBook.value = book
+        isShowingHomepage = false
     }
     init {
         getBooks(query = "jazz")
@@ -57,8 +58,6 @@ class AppViewModel(
 
     var isShowingHomepage: Boolean by mutableStateOf(true)
         private set
-
-
 
     fun onBackToList() {
         isShowingHomepage = true

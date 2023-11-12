@@ -5,10 +5,14 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class BookEntity(
     val id: String,
+    val title: String,
+    val subtitle: String?,
+    val authors: List<String>?,
+    val publisher: String?,
     val thumbnail: String
 )
 
-val defaultBook = BookEntity("-1", "https://en.wikipedia.org/wiki/Book#/media/File:Books_and_Scroll_Ornament_with_Open_Book.png")
+val defaultBook = BookEntity("-1", "title", ", subtitle", listOf("author1", "author2"),"publisher", "https://en.wikipedia.org/wiki/Book#/media/File:Books_and_Scroll_Ornament_with_Open_Book.png")
 
 @Serializable
 data class BookResponse(
@@ -23,6 +27,10 @@ data class Book(
 
 @Serializable
 data class VolumeInfo(
+    val title: String,
+    val subtitle: String? = null,
+    val authors: List<String>? = null,
+    val publisher: String? = null,
     val imageLinks: ImageLinks? = null
 )
 

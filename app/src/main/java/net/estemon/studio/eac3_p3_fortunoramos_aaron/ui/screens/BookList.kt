@@ -35,7 +35,6 @@ fun BookList(
     contentType: AppContentType,
     appUiState: AppUiState,
     onBookCardPressed: (BookEntity) -> Unit,
-    onBackPressed: () -> Unit,
     selectedBook: BookEntity,
     modifier: Modifier = Modifier
 ) {
@@ -118,7 +117,6 @@ fun BookListCard(
 fun VerticalBookshelf(
     books: List<BookEntity>,
     onBookCardPressed: (BookEntity) -> Unit,
-    book: BookEntity,
     modifier: Modifier
 ) {
     Row {
@@ -146,10 +144,9 @@ fun VerticalBookshelf(
 fun HorizontalBookshelf(
     books: List<BookEntity>,
     onBookCardPressed: (BookEntity) -> Unit,
-    book: BookEntity,
     modifier: Modifier,
 
-) {
+    ) {
     Column {
         LazyRow(
             contentPadding = PaddingValues(4.dp),
@@ -187,7 +184,7 @@ fun ListOnlyBookshelf (
         ) { book ->
             BookListCard(
                 book = book,
-                onBookCardPressed = onBookCardPressed,
+                onBookCardPressed = onBookCardPressed,//{ onBookCardPressed(book) },
                 modifier = modifier
                     .padding(4.dp)
                     .aspectRatio(1.5f)
